@@ -1,0 +1,64 @@
+
+<div class="main">
+  <!-- Left drawer fo users list, modeling after the slack layout -->
+  <div class="drawer">
+    <p><b>Users:</b></p>
+    <ul>
+      <!-- Iterate over users, set class to badge for css if user mentioned in comments, ??ngClass and ngStyle interchangable?? -->
+      <li *ngFor="let user of users" >
+        <span [ngClass]="{'badge': isUserMentionedInComments(user.userID)}">{{ user.name }}</span>
+      </li>
+    </ul>
+
+    <div class="button" style="display: flex;
+    justify-content: flex-start;">
+      <!-- Clear user badge notification if mentioned -->
+      <button type="button" (click)="clearMentions()" >
+        <b>Clear Alert</b>
+      </button>
+    </div>
+  </div>
+
+  <div class="message-area">
+    <div>
+      <p><b>Comments:</b></p>
+      <ul>
+        <!-- Iterate over comments  -->
+        <li *ngFor="let comment of comments">
+          <!-- Layout modeled after Limble example comments section -->
+          <div style="display: flex; align-items: center;">
+            <mat-icon style="padding-right:4px;">chat_bubble_outline</mat-icon>
+            <span  style="margin-left: 8px;">
+              {{ comment.message }}
+            </span>
+          </div>
+          <span>{{comment.type}} - {{ comment.timestamp }}</span>
+        </li>
+      </ul>
+    </div>
+  
+    <div class="message-container">
+      <label>Message:</label>
+      <!-- New message area, ngModel binds to message, bind input to the onChange   -->
+      <input rows="3" type="text" [(ngModel)]="message" (input)="onMessageChange()" size="100" />
+      <!-- Check the showDropdown bool -->
+      <div *ngIf="showDropdown" class="dropdown">
+        <!-- Iterate over users, the onChange looks for matches and sets mentioned users, onClick inserts users name into message -->
+        <div *ngFor="let user of mentionedUsers" (click)="selectUser(user)" class="dropdown-item">
+          <mat-icon >person_outline</mat-icon> {{ user.name }}
+        </div>
+      </div>
+  </div>
+
+    <div class="button">
+      <!-- Handle add new comment -->
+      <button type="button" (click)="addComment()">
+        <!-- Layout modeled after Limble example comments section -->
+          <mat-icon >chat_bubble_outline</mat-icon>
+          <b style="padding-right: 4px">/</b>
+          <mat-icon>camera_alt</mat-icon>
+        <b>Add Comment</b>
+      </button>
+    </div>
+  </div>
+</div>
